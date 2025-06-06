@@ -1,5 +1,16 @@
 # Dockerfile para Spring Boot Pokedex API 
 
+# Etapa 1: Compilación
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+
 # Imagen base oficial de OpenJDK 17
 FROM eclipse-temurin:17-jdk-alpine
 
@@ -7,10 +18,8 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copia el jar generado por Maven/Gradle al contenedor
-COPY target/pokedex-*.jar app.jar
+COPY --from=build /app/target/pokedex-*.jar app.jar
 
-# Expone el puerto por defecto de Spring Boot
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
 ENTRYPOINT ["java","-jar","app.jar"]
