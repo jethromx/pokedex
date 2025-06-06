@@ -11,7 +11,7 @@ import lombok.Getter;
 public class AppConfig {
 
    
-    @Value("${POKEMON_API}")
+    @Value("${POKEMON_API:${pokeapi.base-url}}")
     private String baseUrl;
 
 }

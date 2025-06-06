@@ -24,13 +24,11 @@ import com.pokedex.enums.Status;
 import com.pokedex.service.impl.PokeApiServiceImpl;
 
 public class PokeApiServiceImplTest {
-    @InjectMocks
+    @Mock
     private AppConfig appConfig;
     
     @InjectMocks
     private PokeApiServiceImpl pokeApiService;
-
-    
 
     @Mock
     private RestTemplate restTemplate;
@@ -38,6 +36,7 @@ public class PokeApiServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(appConfig.getBaseUrl()).thenReturn("https://pokeapi.co/api/v2");
         pokeApiService.BASE_URL = "https://pokeapi.co/api/v2"; // Asegura que la URL base sea absoluta
     }
 
