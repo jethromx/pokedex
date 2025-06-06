@@ -7,10 +7,19 @@ Pokedex es una API desarrollada en Spring Boot que consume la [PokeAPI](https://
 ## Ejecución Local
 
 ```bash
+export POKEMON_API=https://pokeapi.co/api/v2
+
+export SERVER_PORT=8085
+
 ./mvnw spring-boot:run
 ```
 o
 ```bash
+export POKEMON_API=https://pokeapi.co/api/v2
+
+export SERVER_PORT=8085
+
+
 java -jar target/pokedex-0.0.1-SNAPSHOT.jar
 ```
 
@@ -21,7 +30,6 @@ java -jar target/pokedex-0.0.1-SNAPSHOT.jar
 Asegúrate de tener configuradas las siguientes variables en tu `application.properties`:
 
 ```properties
-pokeapi.base-url=https://pokeapi.co/api/v2
 spring.profiles.active=dev
 ```
 
@@ -57,34 +65,26 @@ La documentación interactiva de la API está disponible en:
 
 ---
 
-##  Notas
+##  Pruebas
 
-- Puedes cambiar la URL de la PokeAPI modificando `pokeapi.base-url` en `application.properties` o la variable de entorno `POKEMON_API`.
-- El sistema de caché es configurable y puede adaptarse a otros proveedores (`caffeine`, `ehcache`, etc.).
-- El proyecto está preparado para ser extendido y adaptado a nuevas versiones de la API o nuevas funcionalidades.
+get list pokemons
+```
+curl --location 'https://pokedex-2f23.onrender.com/api/v0/pokedex?offset=1&limit=10'
+```
 
----
-
-##  Estructura de `application.properties`
-
-```properties
-spring.application.name=pokedex
-api.version=v0
-pokeapi.base-url=https://pokeapi.co/api/v2
-logging.level.web=INFO
-spring.cache.type=simple
-spring.cache.cache-names=cacheListPokemons,cacheDetailPokemon 
-spring.cache.cacheListPokemons.initial-capacity=20
-spring.cache.cacheListPokemons.maximum-size=100
-spring.cache.cacheListPokemons.expire-after-write=1m
-springdoc.api-docs.enabled=true
-springdoc.swagger-ui.enabled=true
-springdoc.swagger-ui.path=/swagger-ui.html
-springdoc.api-docs.path=/v3/api-docs
-spring.profiles.active=dev
+get pokemon by id
+```
+curl --location 'https://pokedex-2f23.onrender.com/api/v0/pokedex/1'
 ```
 
 ---
 
+# Despliegue cloud
 
+* Se tienen un dockerfile configurado util para  generar una imagen docker y subirla a registro publico 
+
+* El despliegue fue en Render.com por la capa gratuita.
+* Considerar que despues de un tiempo se desactica y tarda en levantar la primera vez, pero el despliegue ya esta realizado.
+* Render permite conectar con el repo de github y facilita el despliegue solo considera dar de alta las variables de entorno
+*  en las pruebas que se realicen siempre la primera ejecucion tardara por que no estan cacheadas las peticiones, usa cache simple, pero se podria mejora con uso de otro implementación por ejemplo usando redis.
 ---
